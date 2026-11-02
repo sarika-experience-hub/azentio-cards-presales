@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Promissory Note - Azentio Finance</title>
+<link rel="stylesheet" href="css/styles.css?v=1788177009406">
+</head>
+<body>
+<div class="device">
+  <div class="screen">
+<div class="notch"></div><div class="statusbar"><span>9:41</span><div class="icons">
+  <svg class="icon-signal" viewBox="0 0 18 12" width="18" height="12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx=".5"/><rect x="5" y="5" width="3" height="7" rx=".5"/><rect x="10" y="3" width="3" height="9" rx=".5"/><rect x="15" y="0" width="3" height="12" rx=".5"/></svg>
+  <svg class="icon-battery" viewBox="0 0 25 12" width="22" height="11" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="17" height="8" rx="1" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg>
+</div></div>
+  <div class="page ">
+    <div class="app-header"><a class="icon-btn" href="apply-sign-contract.html" onclick="return true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7" /></svg></a><div class="title"></div></div>
+    <div class="body pn-sms">
+      <div class="h2 pn-title">Promissory note</div>
+      <div class="p center pn-sub">An SMS has been sent with a link to sign your Promissory Note.</div>
+      <div class="pn-expiry" data-pn-expiry="14:43">Expires in <span data-pn-left>14 mins : 43 secs</span></div>
+    </div>
+    <div class="footer"><a class="btn btn-primary" href="apply-success.html" data-nav data-pick-route="disb" data-pick-route-map='{"bank":"apply-disbursement-success.html","card":"apply-success.html"}'><span class="label">Proceed</span><span class="spinner"></span></a><a class="btn-link pn-decline" href="home-new.html" data-pn-decline>Decline</a></div>
+    <div class="pn-toast pn-toast-success" data-pn-toast="sent"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>An SMS has been sent with a link to sign your Promissory Note</span></div>
+    <div class="pn-toast pn-toast-error" data-pn-toast="declined"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 7v6M12 16.5v.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg><span>Your promissory note has been declined</span></div>
+  </div>
+  <div class="home-indicator"></div>
+  </div>
+</div>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  function toast(name, ms){
+    var t=document.querySelector('[data-pn-toast="'+name+'"]'); if(!t) return;
+    document.querySelectorAll('.pn-toast').forEach(function(x){ x.classList.remove('show'); });
+    requestAnimationFrame(function(){ t.classList.add('show'); });
+    if(ms) setTimeout(function(){ t.classList.remove('show'); }, ms);
+  }
+  setTimeout(function(){ toast('sent', 3200); }, 400);
+  var el=document.querySelector('[data-pn-expiry]'), left=el.querySelector('[data-pn-left]');
+  var p=el.dataset.pnExpiry.split(':'), total=(+p[0])*60+(+p[1]);
+  var timer=setInterval(function(){
+    total--;
+    if(total<=0){ clearInterval(timer); el.innerHTML='<span style="color:var(--danger)">Link expired - please restart signing</span>'; return; }
+    left.textContent=Math.floor(total/60)+' mins : '+String(total%60).padStart(2,'0')+' secs';
+  },1000);
+  document.querySelector('[data-pn-decline]').addEventListener('click', function(e){
+    e.preventDefault(); var href=this.getAttribute('href');
+    toast('declined'); setTimeout(function(){ location.href=href; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>
